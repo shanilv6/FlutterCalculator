@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 import 'constants.dart';
 import 'neu_container.dart';
 
@@ -9,6 +10,51 @@ class CalculatorNeuApp extends StatefulWidget {
 
 class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
   bool darkMode = false;
+
+  //variables
+  double firstNum = 0.0;
+  double secondNum = 0.0;
+  var input = "";
+  var output = "";
+  var operation = "";
+  var hideInput =false;
+  double outputSize = 34;
+
+  onButtonClick(value, icon) {
+    //if value is C
+    if (value == "C") {
+      input = "";
+      output = "";
+    } else if (icon == Icons.backspace_outlined) {
+      if(input.isNotEmpty) {
+        input = input.substring(0, input.length - 1);
+      }
+    } else if (value == "=") {
+      if (input.isNotEmpty) {
+        var userInput = input;
+        userInput = input.replaceAll("x", "*");
+        Parser p = Parser();
+        Expression expression = p.parse(userInput);
+        ContextModel cm = ContextModel();
+        var finalValue = expression.evaluate(EvaluationType.REAL, cm);
+        output = finalValue.toString();
+       if(output.endsWith(".0")){
+         output = output.substring(0,output.length - 2);
+       }
+       input = output;
+       hideInput = true;
+       outputSize =50;
+
+      }
+    }else {
+      input = input + value;
+      hideInput = false;
+      outputSize =34;
+    }
+    setState(() {
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +82,8 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      "6.010",
+                      hideInput ? "":
+                      input,
                       style: TextStyle(
                           fontSize: 55,
                           fontWeight: FontWeight.bold,
@@ -53,9 +100,9 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                             color: darkMode ? Colors.green : Colors.grey),
                       ),
                       Text(
-                        "10+500*12",
+                        output,
                         style: TextStyle(
-                            fontSize: 20,
+                            fontSize: outputSize,
                             color: darkMode ? Colors.green : Colors.grey),
                       )
                     ],
@@ -67,7 +114,7 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
               ),
               Column(
                 children: [
-                  Row(
+                  /*  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _buttonOval(title: 'sin'),
@@ -75,16 +122,25 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                       _buttonOval(title: 'tan'),
                       _buttonOval(title: '%'),
                     ],
-                  ),
+                  )*/
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buttonRounded(
-                        title: "C",
-                        textColor: darkMode ? Colors.green : Colors.redAccent,
+                      Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _buttonRounded(
+                            title: "C",
+                            textColor:
+                                darkMode ? Colors.green : Colors.redAccent,
+                          ),
+                          _buttonRounded(
+                            icon: Icons.backspace_outlined,
+                            iconColor:
+                                darkMode ? Colors.green : Colors.redAccent,
+                          ),
+                        ],
                       ),
-                      _buttonRounded(title: "("),
-                      _buttonRounded(title: ")"),
                       _buttonRounded(
                         title: "/",
                         textColor: darkMode ? Colors.green : Colors.redAccent,
@@ -130,12 +186,9 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      _buttonRounded(title: "%"),
                       _buttonRounded(title: "0"),
-                      _buttonRounded(title: ","),
-                      _buttonRounded(
-                        icon: Icons.backspace_outlined,
-                        iconColor: darkMode ? Colors.green : Colors.redAccent,
-                      ),
+                      _buttonRounded(title: "."),
                       _buttonRounded(
                         title: "=",
                         textColor: darkMode ? Colors.green : Colors.redAccent,
@@ -156,6 +209,7 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: NeuContainer(
+        onTap: () => onButtonClick(title, icon),
         darkMode: darkMode,
         borderRadius: BorderRadius.circular(40),
         padding: EdgeInsets.all(padding),
@@ -167,9 +221,8 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
                   ? Text(
                       '$title',
                       style: TextStyle(
-                          color: textColor ?? (darkMode
-                                  ? Colors.white
-                                  : Colors.black),
+                          color: textColor ??
+                              (darkMode ? Colors.white : Colors.black),
                           fontSize: 30),
                     )
                   : Icon(
@@ -182,7 +235,7 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
     );
   }
 
-  Widget _buttonOval({title, double padding = 17}) {
+  /* Widget _buttonOval({title, double padding = 17}) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: NeuContainer(
@@ -204,7 +257,7 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
         ),
       ),
     );
-  }
+  }*/
 
   Widget _switchMode() {
     return NeuContainer(
