@@ -25,10 +25,12 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
     if (value == "C") {
       input = "";
       output = "";
+      //if value is Back-button
     } else if (icon == Icons.backspace_outlined) {
       if(input.isNotEmpty) {
         input = input.substring(0, input.length - 1);
       }
+      //if value is =
     } else if (value == "=") {
       if (input.isNotEmpty) {
         var userInput = input;
