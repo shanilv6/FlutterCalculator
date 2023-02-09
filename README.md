@@ -1,4 +1,6 @@
 # fluttercalculator
+![CALCULATOR APP](https://user-images.githubusercontent.com/100143777/217548090-fcf3eb8a-daf2-47f3-864c-69b4899df659.jpg)
+
 
 A new Flutter project.
 
