@@ -4,6 +4,8 @@ import 'constants.dart';
 import 'neu_container.dart';
 
 class CalculatorNeuApp extends StatefulWidget {
+  const CalculatorNeuApp({super.key});
+
   @override
   _CalculatorNeuAppState createState() => _CalculatorNeuAppState();
 }
@@ -12,8 +14,8 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
   bool darkMode = false;
 
   //variables
-  double firstNum = 0.0;
-  double secondNum = 0.0;
+ // double firstNum = 0.0;
+//  double secondNum = 0.0;
   var input = "";
   var output = "";
   var operation = "";
@@ -30,8 +32,10 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
       if(input.isNotEmpty) {
         input = input.substring(0, input.length - 1);
       }
-      //if value is =
-    } else if (value == "=") {
+    }
+
+    //if value is =
+    else if (value == "=") {
       if (input.isNotEmpty) {
         var userInput = input;
         userInput = input.replaceAll("x", "*");
@@ -45,6 +49,9 @@ class _CalculatorNeuAppState extends State<CalculatorNeuApp> {
        }
        input = output;
        hideInput = true;
+        if (hideInput = true){
+          input= "";
+        }
        outputSize =50;
 
       }
